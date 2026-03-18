@@ -14,11 +14,11 @@ class App:
 
     def on_init(self):
         pygame.init()
-        self.entities.append(Player((0,0)))
-
         self.screen = pygame.display.set_mode(self.size)
+
         self._running = True
         self.delta_time = 0.1
+        self.entities.append(Player((0, 0)))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -66,7 +66,7 @@ class App:
             self.entities[0].update(self.delta_time)
 
             for entity in self.entities:
-                entity.draw(self.screen)
+                entity.draw(self.screen, 0)
             self.on_loop()
             self.on_render()
         self.on_cleanup()

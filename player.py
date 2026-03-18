@@ -3,12 +3,11 @@ import pygame
 class Player():
     test = "SUCCESS"
     def __init__(self, position):
-        self.size_scale = 0.1
-        self.sprite = pygame.image.load("./resources/олень.jpg")
-        self.sprite = pygame.transform.scale(self.sprite,
-                                                    (self.sprite.get_width() * self.size_scale,
-                                                     self.sprite.get_height() * self.size_scale))
+        self.size_scale = 3
+        self.spritesheet = pygame.image.load("./resources/knight.png").convert_alpha()
         self.velocity = 200
+        self.width = 20
+        self.height = 20
 
         self.position = list(position)
         self.hitbox = pygame.Rect(self.position[0], self.position[1], 32, 32)
@@ -18,8 +17,14 @@ class Player():
         self.right_pressed = False
         self.left_pressed = False
 
-    def draw(self, surface):
-        pygame.draw.rect(surface, (255,0,0), self.hitbox)
+    def draw(self, surface, frame):
+        image = pygame.Surface((100, 100)).convert_alpha()
+        image.blit(self.spritesheet, (0, 0), (0 + (100 * frame), 0 + (100 * frame), 100 + (100 * frame), 100 + (100 * frame)))
+        image = pygame.transform.scale(image, (100 * self.size_scale, 100 * self.size_scale))
+        image.set_colorkey((0,0,0))
+
+        surface.blit(image, (self.position[0], self.position[1]))
+
 
     def update(self, delta):
         velX = 0
@@ -42,4 +47,4 @@ class Player():
         self.position[0] += velX * delta
         self.position[1] += velY * delta
 
-        self.hitbox = pygame.Rect(round(self.position[0]), round(self.position[1]), 32, 32)
+        self.hitbox = pygame.Rect(round(self.position[0]), round(self.position[1]), self.width, self.height)

@@ -7,7 +7,7 @@ class App:
         self.player_sprite = None
         self._running = True
         self.screen = None
-        self.size = self.weight, self.height = 900, 640
+        self.size = self.weight, self.height = 300, 500
         self.clock = pygame.time.Clock()
         self.delta_time = None
         self.entities = []
@@ -26,7 +26,7 @@ class App:
 
     def on_loop(self):
         pygame.display.flip()
-        self.delta_time = self.clock.tick(60) / 1000
+        self.delta_time = self.clock.tick(120) / 1000
 
 
     def on_render(self):
@@ -50,25 +50,22 @@ class App:
                     if event.key == pygame.K_s:
                         self.entities[0].down_pressed = True
                     if event.key == pygame.K_a:
-                        self.entities[0].right_pressed = True
-                    if event.key == pygame.K_d:
                         self.entities[0].left_pressed = True
+                    if event.key == pygame.K_d:
+                        self.entities[0].right_pressed = True
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_w:
                         self.entities[0].up_pressed = False
                     if event.key == pygame.K_s:
                         self.entities[0].down_pressed = False
                     if event.key == pygame.K_a:
-                        self.entities[0].right_pressed = False
-                    if event.key == pygame.K_d:
                         self.entities[0].left_pressed = False
+                    if event.key == pygame.K_d:
+                        self.entities[0].right_pressed = False
 
-                self.entities[0].update(self.delta_time)
-
+            self.entities[0].update(self.delta_time)
 
             for entity in self.entities:
-                self.screen.blit(entity.sprite, entity.position)
-
                 entity.draw(self.screen)
             self.on_loop()
             self.on_render()

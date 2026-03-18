@@ -1,6 +1,7 @@
 import pygame
 
 class Player():
+    test = "SUCCESS"
     def __init__(self, position):
         self.size_scale = 0.1
         self.sprite = pygame.image.load("./resources/олень.jpg")

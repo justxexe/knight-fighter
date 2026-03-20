@@ -7,15 +7,19 @@ class App:
         self.player_sprite = None
         self._running = True
         self.screen = None
-        self.size = self.weight, self.height = 300, 500
+        self.size = self.weight, self.height = 1280, 720
         self.clock = pygame.time.Clock()
         self.delta_time = None
         self.entities = []
         self.player = None
+        self.background = None
 
     def on_init(self):
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
+        self.background = pygame.image.load("./resources/background.png").convert()
+        self.background = pygame.transform.scale(self.background, (1280, 720))
+
 
         self._running = True
         self.delta_time = 0.1
@@ -41,7 +45,7 @@ class App:
             self._running = True
 
         while self._running:
-            self.screen.fill((20, 20, 20))
+            self.screen.blit(self.background, (0,0))
             for event in pygame.event.get():
                 self.on_event(event)
                 if event.type == pygame.KEYDOWN:

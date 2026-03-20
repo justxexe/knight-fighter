@@ -15,6 +15,7 @@ class Player:
         self.down_pressed = False
         self.right_pressed = False
         self.left_pressed = False
+        self.is_flipped = False
 
         self.is_moving = False
         self.frame = 0
@@ -42,11 +43,19 @@ class Player:
                 self.is_moving = True
                 self.frame = 0
 
+
         image = pygame.Surface((100, 100)).convert_alpha()
         image.blit(self.spritesheet, (0, 0), (0 + (100 * int(self.frame)), 0 + (100 * a_type), 100 + (100 * int(self.frame)), 100 + (100 * a_type)))
         image = pygame.transform.scale(image, (100 * self.size_scale, 100 * self.size_scale))
-        image.set_colorkey((0,0,0))
 
+        if not self.right_pressed and self.left_pressed:
+            self.is_flipped = True
+        elif self.right_pressed and not self.left_pressed:
+            self.is_flipped = False
+
+        image = pygame.transform.flip(image, self.is_flipped, False)
+
+        image.set_colorkey((0, 0, 0))
         surface.blit(image, (self.position[0], self.position[1]))
 
 

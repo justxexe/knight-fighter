@@ -1,7 +1,6 @@
 import pygame
 
-class Player():
-    test = "SUCCESS"
+class Player:
     def __init__(self, position):
         self.size_scale = 3
         self.spritesheet = pygame.image.load("./resources/knight.png").convert_alpha()
@@ -17,9 +16,34 @@ class Player():
         self.right_pressed = False
         self.left_pressed = False
 
-    def draw(self, surface, frame):
+        self.is_moving = False
+        self.frame = 0
+
+
+    def draw(self, surface):
+        if not (self.right_pressed or self.left_pressed or self.up_pressed or self.down_pressed):
+            a_type = 0
+            if not self.is_moving:
+                if self.frame >= 5.9:
+                    self.frame = 0
+                else:
+                    self.frame += 0.1
+            else:
+                self.is_moving = False
+                self.frame = 0
+        else:
+            a_type = 1
+            if self.is_moving:
+                if self.frame >= 7.9:
+                    self.frame = 0
+                else:
+                    self.frame += 0.1
+            else:
+                self.is_moving = True
+                self.frame = 0
+
         image = pygame.Surface((100, 100)).convert_alpha()
-        image.blit(self.spritesheet, (0, 0), (0 + (100 * frame), 0 + (100 * frame), 100 + (100 * frame), 100 + (100 * frame)))
+        image.blit(self.spritesheet, (0, 0), (0 + (100 * int(self.frame)), 0 + (100 * a_type), 100 + (100 * int(self.frame)), 100 + (100 * a_type)))
         image = pygame.transform.scale(image, (100 * self.size_scale, 100 * self.size_scale))
         image.set_colorkey((0,0,0))
 

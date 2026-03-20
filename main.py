@@ -11,6 +11,7 @@ class App:
         self.clock = pygame.time.Clock()
         self.delta_time = None
         self.entities = []
+        self.player = None
 
     def on_init(self):
         pygame.init()
@@ -18,7 +19,7 @@ class App:
 
         self._running = True
         self.delta_time = 0.1
-        self.entities.append(Player((0, 0)))
+        self.player = Player((0, 0))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -26,7 +27,7 @@ class App:
 
     def on_loop(self):
         pygame.display.flip()
-        self.delta_time = self.clock.tick(120) / 1000
+        self.delta_time = self.clock.tick(60) / 1000
 
 
     def on_render(self):
@@ -39,34 +40,32 @@ class App:
         if not self.on_init():
             self._running = True
 
-
         while self._running:
             self.screen.fill((20, 20, 20))
             for event in pygame.event.get():
                 self.on_event(event)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w:
-                        self.entities[0].up_pressed = True
+                        self.player.up_pressed = True
                     if event.key == pygame.K_s:
-                        self.entities[0].down_pressed = True
+                        self.player.down_pressed = True
                     if event.key == pygame.K_a:
-                        self.entities[0].left_pressed = True
+                        self.player.left_pressed = True
                     if event.key == pygame.K_d:
-                        self.entities[0].right_pressed = True
+                        self.player.right_pressed = True
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_w:
-                        self.entities[0].up_pressed = False
+                        self.player.up_pressed = False
                     if event.key == pygame.K_s:
-                        self.entities[0].down_pressed = False
+                        self.player.down_pressed = False
                     if event.key == pygame.K_a:
-                        self.entities[0].left_pressed = False
+                        self.player.left_pressed = False
                     if event.key == pygame.K_d:
-                        self.entities[0].right_pressed = False
+                        self.player.right_pressed = False
 
-            self.entities[0].update(self.delta_time)
+            self.player.update(self.delta_time)
+            self.player.draw(self.screen)
 
-            for entity in self.entities:
-                entity.draw(self.screen, 0)
             self.on_loop()
             self.on_render()
         self.on_cleanup()

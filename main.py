@@ -1,6 +1,7 @@
 import pygame
 
 from src.player import Player
+from enemy import Enemy
 
 class App:
     def __init__(self):
@@ -10,7 +11,7 @@ class App:
         self.size = self.weight, self.height = 1280, 720
         self.clock = pygame.time.Clock()
         self.delta_time = None
-        self.entities = []
+        self.enemies = []
         self.player = None
         self.background = None
 
@@ -24,6 +25,7 @@ class App:
         self._running = True
         self.delta_time = 0.1
         self.player = Player((0, 0))
+        self.enemies.append(Enemy((1000, 400)))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -66,6 +68,11 @@ class App:
                         self.player.left_pressed = False
                     if event.key == pygame.K_d:
                         self.player.right_pressed = False
+
+            for enemy in self.enemies:
+                enemy.update(self.player, self.delta_time)
+                enemy.draw(self.screen)
+
 
             self.player.update(self.delta_time)
             self.player.draw(self.screen)

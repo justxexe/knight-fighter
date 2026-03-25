@@ -1,12 +1,14 @@
 import pygame
+from pygame.draw import circle
+
 
 class Player:
     def __init__(self, position):
         self.size_scale = 3
         self.spritesheet = pygame.image.load("./resources/knight.png").convert_alpha()
         self.velocity = 200
-        self.width = 20
-        self.height = 20
+        self.width = 300
+        self.height = 300
 
         self.position = list(position)
         self.hitbox = pygame.Rect(self.position[0], self.position[1], 32, 32)
@@ -46,7 +48,7 @@ class Player:
 
         image = pygame.Surface((100, 100)).convert_alpha()
         image.blit(self.spritesheet, (0, 0), (0 + (100 * int(self.frame)), 0 + (100 * a_type), 100 + (100 * int(self.frame)), 100 + (100 * a_type)))
-        image = pygame.transform.scale(image, (100 * self.size_scale, 100 * self.size_scale))
+        image = pygame.transform.scale(image, (self.width, self.height))
 
         if not self.right_pressed and self.left_pressed:
             self.is_flipped = True
@@ -55,8 +57,15 @@ class Player:
 
         image = pygame.transform.flip(image, self.is_flipped, False)
 
+        # circle(surface, (255, 0, 0), self.position, 10)
+        # circle(surface, (255, 0, 0), (self.position[0], self.position[1] + self.height), 10)
+        # circle(surface, (255, 0, 0), (self.position[0] + self.width, self.position[1]), 10)
+        # circle(surface, (255, 0, 0), (self.position[0] + self.width, self.position[1] + self.height), 10)
+
         image.set_colorkey((0, 0, 0))
         surface.blit(image, (self.position[0], self.position[1]))
+
+        # circle(surface, (255, 0, 0), self.get_center(), 10)
 
 
     def update(self, delta):
@@ -82,4 +91,7 @@ class Player:
             self.position[1] += velY * delta
 
         self.hitbox = pygame.Rect(round(self.position[0]), round(self.position[1]), self.width, self.height)
-        print(self.position) # -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)
+        # -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)
+
+    def get_center(self):
+        return self.position[0] + (self.width / 2), self.position[1] + (self.height / 2)

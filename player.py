@@ -76,8 +76,10 @@ class Player:
             velX = velX * 0.707
             velY = velY * 0.707
 
-
-        self.position[0] += velX * delta
-        self.position[1] += velY * delta
+        if - 132 < self.position[0] + (velX * delta) < 1114:
+            self.position[0] += velX * delta
+        if -118 < self.position[1] + (velY * delta) < 551:
+            self.position[1] += velY * delta
 
         self.hitbox = pygame.Rect(round(self.position[0]), round(self.position[1]), self.width, self.height)
+        print(self.position) # -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)

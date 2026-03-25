@@ -9,6 +9,7 @@ class Player:
         self.velocity = 200
         self.width = 300
         self.height = 300
+        self.health = 3
 
         self.position = list(position)
         self.hitbox = pygame.Rect(self.position[0], self.position[1], 32, 32)

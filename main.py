@@ -21,7 +21,6 @@ class App:
         self.background = pygame.image.load("./resources/background.png").convert()
         self.background = pygame.transform.scale(self.background, (1280, 720))
 
-
         self._running = True
         self.delta_time = 0.1
         self.player = Player((0, 0))

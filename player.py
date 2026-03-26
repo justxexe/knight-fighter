@@ -12,7 +12,7 @@ class Player:
         self.health = 3
 
         self.position = list(position)
-        self.hitbox = pygame.Rect(self.position[0], self.position[1], 32, 32)
+        self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)
 
         self.up_pressed = False
         self.down_pressed = False
@@ -57,6 +57,7 @@ class Player:
             self.is_flipped = False
 
         image = pygame.transform.flip(image, self.is_flipped, False)
+        # pygame.draw.rect(surface, (255,0,0), self.hitbox)
 
         # circle(surface, (255, 0, 0), self.position, 10)
         # circle(surface, (255, 0, 0), (self.position[0], self.position[1] + self.height), 10)
@@ -65,6 +66,8 @@ class Player:
 
         image.set_colorkey((0, 0, 0))
         surface.blit(image, (self.position[0], self.position[1]))
+
+        self.hitbox = pygame.Rect(self.get_center()[0] - 15, self.get_center()[1] - 30, 30, 60)
 
         # circle(surface, (255, 0, 0), self.get_center(), 10)
 
@@ -96,3 +99,6 @@ class Player:
 
     def get_center(self):
         return self.position[0] + (self.width / 2), self.position[1] + (self.height / 2)
+
+    def shoot(self):
+        pass

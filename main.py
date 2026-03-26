@@ -2,6 +2,7 @@ import pygame
 
 from src.player import Player
 from enemy import Enemy
+from arrow import Arrow
 
 class App:
     def __init__(self):
@@ -12,6 +13,7 @@ class App:
         self.clock = pygame.time.Clock()
         self.delta_time = None
         self.enemies = []
+        self.projectiles = []
         self.player = None
         self.background = None
 
@@ -58,6 +60,8 @@ class App:
                         self.player.left_pressed = True
                     if event.key == pygame.K_d:
                         self.player.right_pressed = True
+                    if event.key == pygame.K_SPACE:
+                        self.projectiles.append(Arrow(self.player.get_center(), pygame.mouse.get_pos()))
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_w:
                         self.player.up_pressed = False
@@ -71,6 +75,13 @@ class App:
             for enemy in self.enemies:
                 enemy.update(self.player, self.delta_time)
                 enemy.draw(self.screen)
+
+            for arrow in self.projectiles:
+                arrow.update(self.delta_time)
+                arrow.draw(self.screen)
+                print(arrow.position)
+                if (1114 < arrow.position[0] or arrow.position[0] < -132) or (551 < arrow.position[1] or arrow.position[1] < -118):
+                    self.projectiles.remove(arrow)
 
 
             self.player.update(self.delta_time)

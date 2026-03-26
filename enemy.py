@@ -13,6 +13,8 @@ class Enemy:
         self.frame = 0
         self.is_flipped = False
 
+        self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)
+
     def update(self, player, delta):
 
         if self.frame > 7.9:
@@ -46,6 +48,8 @@ class Enemy:
 
         image.set_colorkey((0, 0, 0))
         surface.blit(image, (self.position[0], self.position[1]))
+
+        self.hitbox = pygame.Rect(self.get_center()[0] - 15, self.get_center()[1] - 30, 30, 60)
 
     def get_center(self):
         return self.position[0] + (self.width / 2), self.position[1] + (self.height / 2)

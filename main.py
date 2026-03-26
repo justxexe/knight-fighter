@@ -17,6 +17,8 @@ class App:
         self.projectiles = []
         self.player = None
         self.background = None
+        self.spawn_rate = datetime.timedelta(seconds=1)
+        self.last_spawn = datetime.datetime.now()
 
     def on_init(self):
         pygame.init()
@@ -80,7 +82,6 @@ class App:
             for arrow in self.projectiles[:]:
                 arrow.update(self.delta_time)
                 arrow.draw(self.screen)
-                print(arrow.position)
                 if (1114 < arrow.position[0] or arrow.position[0] < -132) or (551 < arrow.position[1] or arrow.position[1] < -118):
                     self.projectiles.remove(arrow)
 
@@ -101,9 +102,9 @@ class App:
                         if self.player.health <= 0:
                             self.player = Player((0, 0))
 
-
-
-
+            if datetime.datetime.now() - self.last_spawn >= self.spawn_rate:
+                self.enemies.append(Enemy((800, 200)))
+                self.last_spawn = datetime.datetime.now()
 
             self.on_loop()
             self.on_render()

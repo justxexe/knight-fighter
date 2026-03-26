@@ -3,7 +3,7 @@ import pygame
 class Arrow:
     def __init__(self, position, target):
         self.position = list(position)
-        self.speed = 5
+        self.speed = 1000
         self.width = 15
         self.height = 5
         self.sprite = pygame.transform.scale(pygame.image.load("./resources/arrow.png").convert(), (32, 32)).convert_alpha()

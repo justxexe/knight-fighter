@@ -1,5 +1,5 @@
 import pygame
-from pygame.draw import circle
+import datetime
 
 
 class Player:
@@ -10,6 +10,7 @@ class Player:
         self.width = 300
         self.height = 300
         self.health = 3
+        self.last_hit = datetime.datetime.now()
 
         self.position = list(position)
         self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)

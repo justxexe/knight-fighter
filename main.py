@@ -3,6 +3,7 @@ import pygame
 from src.player import Player
 from enemy import Enemy
 from arrow import Arrow
+import datetime
 
 class App:
     def __init__(self):
@@ -72,11 +73,11 @@ class App:
                     if event.key == pygame.K_d:
                         self.player.right_pressed = False
 
-            for enemy in self.enemies:
+            for enemy in self.enemies[:]:
                 enemy.update(self.player, self.delta_time)
                 enemy.draw(self.screen)
 
-            for arrow in self.projectiles:
+            for arrow in self.projectiles[:]:
                 arrow.update(self.delta_time)
                 arrow.draw(self.screen)
                 print(arrow.position)
@@ -86,6 +87,23 @@ class App:
 
             self.player.update(self.delta_time)
             self.player.draw(self.screen)
+
+            for enemy in self.enemies[:]:
+                for arrow in self.projectiles[:]:
+                    if enemy.hitbox.colliderect(arrow.hitbox):
+                        self.enemies.remove(enemy)
+                        self.projectiles.remove(arrow)
+                        break
+                if enemy.hitbox.colliderect(self.player.hitbox):
+                    if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1):
+                        self.player.last_hit = datetime.datetime.now()
+                        self.player.health -= 1
+                        if self.player.health <= 0:
+                            self.player = Player((0, 0))
+
+
+
+
 
             self.on_loop()
             self.on_render()

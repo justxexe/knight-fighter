@@ -1,14 +1,15 @@
 import pygame
 import datetime
 
+from src.entity import Entity
 
-class Player:
+
+class Player(Entity):
     def __init__(self, position):
+        super().__init__(300, 300, pygame.image.load("./resources/knight.png").convert_alpha())
+
         self.size_scale = 3
-        self.spritesheet = pygame.image.load("./resources/knight.png").convert_alpha()
         self.velocity = 200
-        self.width = 300
-        self.height = 300
         self.health = 3
         self.last_hit = datetime.datetime.now()
 

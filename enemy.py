@@ -1,15 +1,15 @@
 import pygame
 
-class Enemy:
+from src.entity import Entity
+
+
+class Enemy(Entity):
     def __init__(self, position):
+        super().__init__(300, 300, pygame.image.load("./resources/orc.png").convert_alpha())
         self.health = 3
         self.position = list(position)
         self.speed = 100
 
-        self.width = 300
-        self.height = 300
-
-        self.spritesheet = pygame.image.load("./resources/orc.png").convert_alpha()
         self.frame = 0
         self.is_flipped = False
 

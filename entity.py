@@ -1,15 +1,17 @@
+from typing import overload
+
 import pygame
 
 class Entity:
-    def __init__(self, width, height, spritesheet):
+    def __init__(self, position, width, height, spritesheet):
         self.width = width
         self.height = height
-        self.position = list()
+        self.position = list(position)
         self.hitbox = list()
 
         self.spritesheet = spritesheet
 
-    def draw(self, surface, animation_type, frame, is_flipped):
+    def draw(self, surface, animation_type, is_flipped, frame):
         image = pygame.Surface((100, 100)).convert_alpha()
         image.blit(self.spritesheet,
                    (0, 0),

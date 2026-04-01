@@ -5,6 +5,9 @@ from enemy import Enemy
 from arrow import Arrow
 import datetime
 
+
+# -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)
+
 class App:
     def __init__(self):
         self.player_sprite = None
@@ -17,11 +20,17 @@ class App:
         self.projectiles = []
         self.player = None
         self.background = None
+
         self.spawn_rate = datetime.timedelta(seconds=1)
         self.last_spawn = datetime.datetime.now()
 
+        self.cooldown = datetime.timedelta(milliseconds=750)
+        self.last_shot = datetime.datetime.now()
+        # self.font = pygame.font.SysFont('Comic Sans MS', 30)
+
     def on_init(self):
         pygame.init()
+        # pygame.font.init()
         self.screen = pygame.display.set_mode(self.size)
         self.background = pygame.image.load("./resources/background.png").convert()
         self.background = pygame.transform.scale(self.background, (1280, 720))
@@ -64,7 +73,10 @@ class App:
                     if event.key == pygame.K_d:
                         self.player.right_pressed = True
                     if event.key == pygame.K_SPACE:
-                        self.projectiles.append(Arrow(self.player.get_center(), pygame.mouse.get_pos()))
+                        if datetime.datetime.now() - self.last_shot >= self.cooldown:
+                            self.projectiles.append(Arrow(self.player.get_center(), pygame.mouse.get_pos()))
+                            self.last_shot = datetime.datetime.now()
+                            self.player.shoot()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_w:
                         self.player.up_pressed = False
@@ -76,18 +88,15 @@ class App:
                         self.player.right_pressed = False
 
             for enemy in self.enemies[:]:
-                enemy.update(self.player, self.delta_time)
-                enemy.draw(self.screen)
+                enemy.update(self.screen, self.player, self.delta_time)
 
             for arrow in self.projectiles[:]:
-                arrow.update(self.delta_time)
-                arrow.draw(self.screen)
+                arrow.update(self.screen, self.delta_time)
                 if (1114 < arrow.position[0] or arrow.position[0] < -132) or (551 < arrow.position[1] or arrow.position[1] < -118):
                     self.projectiles.remove(arrow)
 
 
-            self.player.update(self.delta_time)
-            self.player.draw(self.screen)
+            self.player.update(self.screen, self.delta_time)
 
             for enemy in self.enemies[:]:
                 for arrow in self.projectiles[:]:
@@ -98,9 +107,9 @@ class App:
                 if enemy.hitbox.colliderect(self.player.hitbox):
                     if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1):
                         self.player.last_hit = datetime.datetime.now()
-                        self.player.health -= 1
+                        self.player.take_damage(1)
                         if self.player.health <= 0:
-                            self.player = Player((0, 0))
+                            self.player.die()
 
             if datetime.datetime.now() - self.last_spawn >= self.spawn_rate:
                 self.enemies.append(Enemy((800, 200)))

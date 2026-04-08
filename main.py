@@ -4,6 +4,7 @@ from src.player import Player
 from enemy import Enemy
 from arrow import Arrow
 import datetime
+import random
 
 
 # -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)
@@ -21,8 +22,9 @@ class App:
         self.player = None
         self.background = None
 
-        self.spawn_rate = datetime.timedelta(seconds=1)
+        self.spawn_rate = datetime.timedelta(seconds=10)
         self.last_spawn = datetime.datetime.now()
+        self.spawn_points = ((-150, -120), (1150, -140), (1150, 570), (-150, 570), (-75, -120), (600, 570), (-150, 260), (540, -140))
 
         self.cooldown = datetime.timedelta(milliseconds=750)
         self.last_shot = datetime.datetime.now()
@@ -110,9 +112,12 @@ class App:
                         self.player.take_damage(1)
                         if self.player.health <= 0:
                             self.player.die()
+                            self._running = False
+                            continue
 
             if datetime.datetime.now() - self.last_spawn >= self.spawn_rate:
-                self.enemies.append(Enemy((800, 200)))
+                spawn_point = random.choice(self.spawn_points)
+                self.enemies.append(Enemy(spawn_point))
                 self.last_spawn = datetime.datetime.now()
 
             self.on_loop()

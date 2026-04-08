@@ -12,7 +12,7 @@ class Arrow(Entity):
         self.speed = 1000
         self.target = target
         self.angle = -math.degrees(math.atan2(target[1]-position[1], target[0]-position[0]))
-        sprite = pygame.transform.scale(self.spritesheet, (32, 32)).convert_alpha()
+        sprite = pygame.transform.scale(self.spritesheet, (64, 64)).convert_alpha()
         self.sprite = pygame.transform.rotate(sprite, self.angle)
 
         self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)

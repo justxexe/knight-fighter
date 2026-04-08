@@ -7,7 +7,7 @@ import datetime
 import random
 
 
-# -132 - 118 (top-left) 1114 - 118 (rop-right) 1114 551 (bottom-right) -132 551 (bottom-left)
+# -132 - 118 (top-left) 1114 - 118 (top-right) 1114 551 (bottom-right) -132 551 (bottom-left)
 
 class App:
     def __init__(self):
@@ -21,18 +21,22 @@ class App:
         self.projectiles = []
         self.player = None
         self.background = None
+        self.score = 0
 
-        self.spawn_rate = datetime.timedelta(seconds=10)
+        self.spawn_rate = datetime.timedelta(seconds=1)
         self.last_spawn = datetime.datetime.now()
         self.spawn_points = ((-150, -120), (1150, -140), (1150, 570), (-150, 570), (-75, -120), (600, 570), (-150, 260), (540, -140))
 
         self.cooldown = datetime.timedelta(milliseconds=750)
         self.last_shot = datetime.datetime.now()
-        # self.font = pygame.font.SysFont('Comic Sans MS', 30)
+
+        self.font = None
 
     def on_init(self):
         pygame.init()
-        # pygame.font.init()
+        pygame.font.init()
+        self.font = pygame.font.SysFont('Arial', 30, bold=True)
+
         self.screen = pygame.display.set_mode(self.size)
         self.background = pygame.image.load("./resources/background.png").convert()
         self.background = pygame.transform.scale(self.background, (1280, 720))
@@ -47,6 +51,18 @@ class App:
             self._running = False
 
     def on_loop(self):
+        score_text = self.font.render('очки: ' + str(self.score), 1, (255,0,0))
+        if self.player.health == 3:
+            health_text = self.font.render("здоров", 1, (255,0,0))
+        elif self.player.health == 2:
+            health_text = self.font.render("ранен", 1, (255,0,0))
+        elif self.player.health == 1:
+            health_text = self.font.render("присмерти", 1, (255,0,0))
+        else:
+            health_text = self.font.render("умерв", 1, (255,0,0))
+
+        self.screen.blit(score_text, (0,0))
+        self.screen.blit(health_text, (1100,0))
         pygame.display.flip()
         self.delta_time = self.clock.tick(60) / 1000
 
@@ -105,6 +121,7 @@ class App:
                     if enemy.hitbox.colliderect(arrow.hitbox):
                         self.enemies.remove(enemy)
                         self.projectiles.remove(arrow)
+                        self.score += 1
                         break
                 if enemy.hitbox.colliderect(self.player.hitbox):
                     if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1):

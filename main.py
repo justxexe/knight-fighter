@@ -9,7 +9,7 @@ import random
 
 # -132 - 118 (top-left) 1114 - 118 (top-right) 1114 551 (bottom-right) -132 551 (bottom-left)
 
-class App:
+class KnightFighter:
     def __init__(self):
         self.player_sprite = None
         self._running = True
@@ -110,7 +110,7 @@ class App:
 
             for arrow in self.projectiles[:]:
                 arrow.update(self.screen, self.delta_time)
-                if (1114 < arrow.position[0] or arrow.position[0] < -132) or (551 < arrow.position[1] or arrow.position[1] < -118):
+                if (1280 < arrow.get_center()[0] or arrow.get_center()[0] < 0) or (720 < arrow.get_center()[1] or arrow.get_center()[1] < 0):
                     self.projectiles.remove(arrow)
 
 
@@ -148,5 +148,5 @@ class App:
 
 
 if __name__ == "__main__":
-    theApp = App()
-    theApp.on_execute()
+    knight_fighter = KnightFighter()
+    knight_fighter.on_execute()

@@ -117,16 +117,21 @@ class App:
             self.player.update(self.screen, self.delta_time)
 
             for enemy in self.enemies[:]:
+                if not enemy.alive:
+                    self.enemies.remove(enemy)
+                    continue
                 for arrow in self.projectiles[:]:
                     if enemy.hitbox.colliderect(arrow.hitbox):
-                        self.enemies.remove(enemy)
+                        enemy.die()
                         self.projectiles.remove(arrow)
                         self.score += 1
                         break
+
                 if enemy.hitbox.colliderect(self.player.hitbox):
                     if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1):
                         self.player.last_hit = datetime.datetime.now()
                         self.player.take_damage(1)
+                        enemy.attack()
                         if self.player.health <= 0:
                             self.player.die()
                             self._running = False

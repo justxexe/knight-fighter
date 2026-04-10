@@ -11,14 +11,30 @@ class Enemy(Entity):
         self.speed = 100
 
         self.frame = 0
+        self.attacking_animation = False
+        self.dying_animation = False
+        self.alive = True
 
         self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)
 
     def update(self, surface, player, delta):
-        if self.frame > 6.9:
-            self.frame = 0
+        if self.attacking_animation:
+            animation_type = 2
+            self.frame += 0.1
+            if self.frame > 5:
+                self.attacking_animation = False
+                self.frame = 0
+        elif self.dying_animation:
+            animation_type = 5
+            self.frame += 0.1
+            if self.frame > 3:
+                self.alive = False
         else:
-            self.frame += 0.05
+            animation_type = 1
+            if self.frame > 6.9:
+                self.frame = 0
+            else:
+                self.frame += 0.05
 
         player_position = list(player.get_center())
         position = list(self.get_center())
@@ -33,10 +49,21 @@ class Enemy(Entity):
 
         velocity = [velocity[0] / magnitude * self.speed, velocity[1] / magnitude * self.speed]
 
-        self.position[0] -= velocity[0] * delta
-        self.position[1] -= velocity[1] * delta
+        if not self.dying_animation:
+            self.position[0] -= velocity[0] * delta
+            self.position[1] -= velocity[1] * delta
 
-        self.draw(surface, 1, is_flipped, self.frame)
+        self.draw(surface, animation_type, is_flipped, self.frame)
+
+
+    def attack(self):
+        self.frame = 0
+        self.attacking_animation = True
+
+    def die(self):
+        self.frame = 0
+        self.dying_animation = True
+
 
     # def draw(self, surface):
     #     image = pygame.Surface((100, 100)).convert_alpha()

@@ -14,16 +14,20 @@ class Enemy(Entity):
         self.attacking_animation = False
         self.dying_animation = False
         self.alive = True
+        self.just_attacked = False
 
         self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)
 
     def update(self, surface, player, delta):
+        if self.just_attacked:
+            self.just_attacked = False
         if self.attacking_animation:
             animation_type = 2
             self.frame += 0.1
             if self.frame > 5:
                 self.attacking_animation = False
                 self.frame = 0
+                self.just_attacked = True
         elif self.dying_animation:
             animation_type = 5
             self.frame += 0.1
@@ -49,7 +53,7 @@ class Enemy(Entity):
 
         velocity = [velocity[0] / magnitude * self.speed, velocity[1] / magnitude * self.speed]
 
-        if not self.dying_animation:
+        if not self.dying_animation and not self.attacking_animation and magnitude > 0.1:
             self.position[0] -= velocity[0] * delta
             self.position[1] -= velocity[1] * delta
 

@@ -1,5 +1,3 @@
-from typing import overload
-
 import pygame
 
 class Entity:

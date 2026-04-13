@@ -22,6 +22,7 @@ class Player(Entity):
         self.right_pressed = False
         self.left_pressed = False
 
+        self.alive = True
         self.damage_animation = False
         self.death_animation = False
         self.shooting_animation = False
@@ -59,7 +60,7 @@ class Player(Entity):
             animation_type = 6
             self.frame += 0.1
             if self.frame > 3:
-                return False
+                self.alive = False
         elif self.damage_animation:
             animation_type = 5
             self.frame += 0.1

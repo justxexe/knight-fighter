@@ -51,22 +51,8 @@ class KnightFighter:
             self._running = False
 
     def on_loop(self):
-        score_text = self.font.render('очки', 1, (210,0,0))
-        self.screen.blit(score_text, (600,0))
-        score_text = self.font.render(str(self.score), 1, (210, 0, 0))
-        self.screen.blit(score_text, (620, 30))
-
-        if self.player.health == 3:
-            health_text = self.font.render("здоров", 1, (210,0,0))
-        elif self.player.health == 2:
-            health_text = self.font.render("ранен", 1, (210,0,0))
-        elif self.player.health == 1:
-            health_text = self.font.render("присмерти", 1, (210,0,0))
-        else:
-            health_text = self.font.render("умерв", 1, (210,0,0))
-
-        self.screen.blit(health_text, (600, 650))
         pygame.display.flip()
+
         self.delta_time = self.clock.tick(60) / 1000
 
 
@@ -145,10 +131,42 @@ class KnightFighter:
                     self.enemies.append(Enemy(spawn_point))
                     self.last_spawn = datetime.datetime.now()
 
+                score_text = self.font.render('очки', 1, (210, 0, 0))
+                self.screen.blit(score_text, (600, 0))
+                score_text = self.font.render(str(self.score), 1, (210, 0, 0))
+                self.screen.blit(score_text, (630, 30))
+
+                if self.player.health == 3:
+                    health_text = self.font.render("здоров", 1, (210, 0, 0))
+                elif self.player.health == 2:
+                    health_text = self.font.render("ранен", 1, (210, 0, 0))
+                elif self.player.health == 1:
+                    health_text = self.font.render("присмерти", 1, (210, 0, 0))
+                else:
+                    health_text = self.font.render("умерв", 1, (210, 0, 0))
+
+                self.screen.blit(health_text, (600, 650))
+
                 self.on_loop()
                 self.on_render()
             else:
-                self.screen.blit()
+                self.screen.fill((0,0,0))
+                self.screen.blit(self.background, (0, 0))
+                background = pygame.transform.average_color(self.background)
+                game_over_text = self.font.render("GAME OVER", (210, 10, 0),5)
+                death_text = self.font.render("you died", (200, 20, 0), 4)
+                score_text = self.font.render(f"your final score: {self.score}", (200, 20, 0), 4)
+                quit_text = self.font.render("press Q to quit", (200, 20, 0), 4)
+                self.screen.blit(game_over_text, (540, 300))
+                self.screen.blit(death_text, (570, 340))
+                self.screen.blit(score_text, (520, 380))
+                self.screen.blit(quit_text, (530, 420))
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_q:
+                            self._running = False
+                self.on_loop()
+                self.on_render()
         self.on_cleanup()
 
 

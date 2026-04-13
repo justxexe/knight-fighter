@@ -72,13 +72,13 @@ class KnightFighter:
                 for event in pygame.event.get():
                     self.on_event(event)
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_w:
+                        if event.key == pygame.K_i or event.key == pygame.K_w:
                             self.player.up_pressed = True
-                        if event.key == pygame.K_s:
+                        if event.key == pygame.K_k or  event.key == pygame.K_s:
                             self.player.down_pressed = True
-                        if event.key == pygame.K_a:
+                        if event.key == pygame.K_j or  event.key == pygame.K_a:
                             self.player.left_pressed = True
-                        if event.key == pygame.K_d:
+                        if event.key == pygame.K_l or  event.key == pygame.K_d:
                             self.player.right_pressed = True
                         if event.key == pygame.K_SPACE:
                             if datetime.datetime.now() - self.last_shot >= self.cooldown:
@@ -86,13 +86,13 @@ class KnightFighter:
                                 self.last_shot = datetime.datetime.now()
                                 self.player.shoot()
                     if event.type == pygame.KEYUP:
-                        if event.key == pygame.K_w:
+                        if event.key == pygame.K_i or  event.key == pygame.K_w:
                             self.player.up_pressed = False
-                        if event.key == pygame.K_s:
+                        if event.key == pygame.K_k or  event.key == pygame.K_s:
                             self.player.down_pressed = False
-                        if event.key == pygame.K_a:
+                        if event.key == pygame.K_j or  event.key == pygame.K_a:
                             self.player.left_pressed = False
-                        if event.key == pygame.K_d:
+                        if event.key == pygame.K_l or  event.key == pygame.K_d:
                             self.player.right_pressed = False
 
                 for enemy in self.enemies[:]:
@@ -135,17 +135,14 @@ class KnightFighter:
                 self.screen.blit(score_text, (600, 0))
                 score_text = self.font.render(str(self.score), 1, (210, 0, 0))
                 self.screen.blit(score_text, (630, 30))
+                healthbar_red = pygame.rect.Rect(self.player.get_center()[0] - 20, self.player.get_center()[1] - 45, 40, 6)
+                healthbar_green = pygame.rect.Rect(self.player.get_center()[0] - 20,
+                                                   self.player.get_center()[1] - 45,
+                                                   self.player.health * (40/3),
+                                                   6)
 
-                if self.player.health == 3:
-                    health_text = self.font.render("здоров", 1, (210, 0, 0))
-                elif self.player.health == 2:
-                    health_text = self.font.render("ранен", 1, (210, 0, 0))
-                elif self.player.health == 1:
-                    health_text = self.font.render("присмерти", 1, (210, 0, 0))
-                else:
-                    health_text = self.font.render("умерв", 1, (210, 0, 0))
-
-                self.screen.blit(health_text, (600, 650))
+                pygame.draw.rect(self.screen, (255,0,0), healthbar_red)
+                pygame.draw.rect(self.screen, (0,255,0), healthbar_green)
 
                 self.on_loop()
                 self.on_render()

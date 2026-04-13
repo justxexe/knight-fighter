@@ -23,7 +23,7 @@ class KnightFighter:
         self.background = None
         self.score = 0
 
-        self.spawn_rate = datetime.timedelta(seconds=1)
+        self.spawn_rate = datetime.timedelta(milliseconds=900)
         self.last_spawn = datetime.datetime.now()
         self.spawn_points = ((-150, -120), (1150, -140), (1150, 570), (-150, 570), (-75, -120), (600, 570), (-150, 260), (540, -140))
 
@@ -43,8 +43,6 @@ class KnightFighter:
 
         self._running = True
         self.delta_time = 0.1
-        self.player = Player((0, 0))
-        self.enemies.append(Enemy((1000, 400)))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -55,10 +53,6 @@ class KnightFighter:
 
         self.delta_time = self.clock.tick(60) / 1000
 
-
-    def on_render(self):
-        pass
-
     def on_cleanup(self):
         pygame.quit()
 
@@ -68,7 +62,15 @@ class KnightFighter:
 
         while self._running:
             self.screen.blit(self.background, (0,0))
-            if self.player.alive:
+            if not self.player:
+                menu_text = self.font.render("Для начала игры нажмите пробел", (0,0,0), 5)
+                self.screen.blit(menu_text, (380, 250))
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            self.player = Player((0,0))
+                self.on_loop()
+            elif self.player.alive:
                 for event in pygame.event.get():
                     self.on_event(event)
                     if event.type == pygame.KEYDOWN:
@@ -145,25 +147,23 @@ class KnightFighter:
                 pygame.draw.rect(self.screen, (0,255,0), healthbar_green)
 
                 self.on_loop()
-                self.on_render()
             else:
                 self.screen.fill((0,0,0))
                 self.screen.blit(self.background, (0, 0))
                 background = pygame.transform.average_color(self.background)
-                game_over_text = self.font.render("GAME OVER", (210, 10, 0),5)
-                death_text = self.font.render("you died", (200, 20, 0), 4)
-                score_text = self.font.render(f"your final score: {self.score}", (200, 20, 0), 4)
-                quit_text = self.font.render("press Q to quit", (200, 20, 0), 4)
-                self.screen.blit(game_over_text, (540, 300))
-                self.screen.blit(death_text, (570, 340))
-                self.screen.blit(score_text, (520, 380))
-                self.screen.blit(quit_text, (530, 420))
+                game_over_text = self.font.render("ИГРА ОКОНЧЕНА", (210, 10, 0),5)
+                death_text = self.font.render("Вы умерли", (200, 20, 0), 4)
+                score_text = self.font.render(f"Ваш финальный счет: {self.score}", (200, 20, 0), 4)
+                quit_text = self.font.render("Нажмите Q что бы выйти", (200, 20, 0), 4)
+                self.screen.blit(game_over_text, (500, 250))
+                self.screen.blit(death_text, (540, 290))
+                self.screen.blit(score_text, (450, 340))
+                self.screen.blit(quit_text, (450, 370))
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_q:
                             self._running = False
                 self.on_loop()
-                self.on_render()
         self.on_cleanup()
 
 

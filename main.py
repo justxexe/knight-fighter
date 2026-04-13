@@ -124,7 +124,7 @@ class KnightFighter:
                             break
 
                     if enemy.hitbox.colliderect(self.player.hitbox):
-                        if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1):
+                        if datetime.datetime.now() - self.player.last_hit  >= datetime.timedelta(seconds=1) and enemy.alive:
                             self.player.last_hit = datetime.datetime.now()
                             enemy.attack()
 
@@ -135,7 +135,7 @@ class KnightFighter:
 
                 score_text = self.font.render('очки', 1, (210, 0, 0))
                 self.screen.blit(score_text, (600, 0))
-                score_text = self.font.render(str(self.score), 1, (210, 0, 0))
+                score_text = self.font.render(str(52), 1, (210, 0, 0))
                 self.screen.blit(score_text, (630, 30))
                 healthbar_red = pygame.rect.Rect(self.player.get_center()[0] - 20, self.player.get_center()[1] - 45, 40, 6)
                 healthbar_green = pygame.rect.Rect(self.player.get_center()[0] - 20,
@@ -150,19 +150,25 @@ class KnightFighter:
             else:
                 self.screen.fill((0,0,0))
                 self.screen.blit(self.background, (0, 0))
-                background = pygame.transform.average_color(self.background)
                 game_over_text = self.font.render("ИГРА ОКОНЧЕНА", (210, 10, 0),5)
                 death_text = self.font.render("Вы умерли", (200, 20, 0), 4)
                 score_text = self.font.render(f"Ваш финальный счет: {self.score}", (200, 20, 0), 4)
-                quit_text = self.font.render("Нажмите Q что бы выйти", (200, 20, 0), 4)
+                restart_text = self.font.render("Нажмите R чтобы начать заново", (200, 20, 0), 4)
+                quit_text = self.font.render("Нажмите Q чтобы выйти", (200, 20, 0), 4)
                 self.screen.blit(game_over_text, (500, 250))
                 self.screen.blit(death_text, (540, 290))
-                self.screen.blit(score_text, (450, 340))
-                self.screen.blit(quit_text, (450, 370))
+                self.screen.blit(score_text, (450, 330))
+                self.screen.blit(restart_text, (400, 380))
+                self.screen.blit(quit_text, (450, 420))
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_q:
                             self._running = False
+                        if event.key == pygame.K_r:
+                            self.player = Player((0, 0))
+                            self.score = 0
+                            for enemy in self.enemies[:]:
+                                self.enemies.remove(enemy)
                 self.on_loop()
         self.on_cleanup()
 

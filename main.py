@@ -135,7 +135,7 @@ class KnightFighter:
 
                 score_text = self.font.render('очки', 1, (210, 0, 0))
                 self.screen.blit(score_text, (600, 0))
-                score_text = self.font.render(str(52), 1, (210, 0, 0))
+                score_text = self.font.render(str(self.score), 1, (210, 0, 0))
                 self.screen.blit(score_text, (630, 30))
                 healthbar_red = pygame.rect.Rect(self.player.get_center()[0] - 20, self.player.get_center()[1] - 45, 40, 6)
                 healthbar_green = pygame.rect.Rect(self.player.get_center()[0] - 20,

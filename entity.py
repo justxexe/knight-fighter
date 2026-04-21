@@ -25,6 +25,8 @@ class Entity:
             self.get_center()[1] - int(self.height/10),
             int(self.width/10),
             int(self.height/5))
+        # pygame.draw.rect(surface, (255, 0, 0), self.hitbox)
+
 
     def get_center(self):
         return self.position[0] + (self.width / 2), self.position[1] + (self.height / 2)

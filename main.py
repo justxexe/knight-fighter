@@ -84,7 +84,8 @@ class KnightFighter:
                             self.player.right_pressed = True
                         if event.key == pygame.K_SPACE:
                             if datetime.datetime.now() - self.last_shot >= self.cooldown:
-                                self.projectiles.append(Arrow(self.player.get_center(), pygame.mouse.get_pos()))
+                                arrow = Arrow(self.player.get_center(), pygame.mouse.get_pos())
+                                self.projectiles.append(arrow)
                                 self.last_shot = datetime.datetime.now()
                                 self.player.shoot()
                     if event.type == pygame.KEYUP:

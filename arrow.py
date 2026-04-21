@@ -6,14 +6,20 @@ from src.entity import Entity
 
 class Arrow(Entity):
     def __init__(self, position, target):
-        super().__init__(position, 15, 5, pygame.image.load("./resources/arrow.png").convert())
+        super().__init__(position, 64, 64, pygame.image.load("./resources/arrow.png").convert())
         self.speed = 1000
         self.target = target
-        self.angle = -math.degrees(math.atan2(target[1]-position[1], target[0]-position[0]))
+        self.atan = math.atan2(target[1]-position[1], target[0]-position[0])
+        self.angle = -math.degrees(self.atan)
         sprite = pygame.transform.scale(self.spritesheet, (64, 64)).convert_alpha()
         self.sprite = pygame.transform.rotate(sprite, self.angle)
 
-        self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1], 25, 25)
+        self.hitbox = pygame.Rect(
+            self.get_center()[0] + 8 * math.cos(self.atan),
+            self.get_center()[1] + 8 * math.sin(self.atan),
+            7,
+            7
+        )
 
 
         velocity = [position[0] - target[0], position[1] - target[1]]
@@ -31,5 +37,12 @@ class Arrow(Entity):
 
     def draw(self, surface, **kwargs):
         surface.blit(self.sprite, self.position)
-        self.hitbox = pygame.Rect(self.get_center()[0], self.get_center()[1] + 12, 16, 5)
+        self.hitbox = pygame.Rect(
+            self.get_center()[0] + 8 * math.cos(self.atan),
+            self.get_center()[1] + 8 * math.sin(self.atan),
+            7,
+            7
+        )
+        # pygame.draw.rect(surface, (255, 0, 0), self.hitbox)
+
 
